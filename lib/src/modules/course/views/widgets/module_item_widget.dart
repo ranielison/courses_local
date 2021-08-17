@@ -14,7 +14,7 @@ class ModuleItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Text(module.name),
-      children: module.classes
+      children: module.classes!
           .map(
             (c) => ClassItemWidget(courseClass: c),
           )

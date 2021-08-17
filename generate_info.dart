@@ -1,30 +1,38 @@
 import 'dart:io';
-import 'lib/src/global/data/models/course.dart';
+import 'lib/src/global/data/models/course_class.dart';
 import 'lib/src/global/data/models/module.dart';
 
 class GenerateInfo {
-  static Course generate(String path) {
+  static Module generate(String path) {
     List<Module> modules = [];
-
-    Course(
-      name: '',
-      folderPath: '',
-      modules: [],
-    );
+    List<CourseClass> classes = [];
 
     Directory courseDir = Directory(path);
 
-    courseDir.list(recursive: true).forEach((FileSystemEntity item) {
-      if (item is Directory) {}
-      //print(item.runtimeType);
-      //print('Is File: ${item is File}');
-      //print('Is Directory: ${item is Directory}');
+    courseDir.list(recursive: false).forEach(
+      (FileSystemEntity item) {
+        if (item is Directory) {
+          final subModule = GenerateInfo.generate(item.path);
+          modules.add(subModule);
+        } else {
+          final c = CourseClass(
+            name: item.toString(),
+            classPath: '',
+          );
+          classes.add(c);
+        }
+      },
+    );
+
+    classes.forEach((element) {
+      print(element.name);
     });
 
-    return Course(
+    return Module(
+      classes: classes,
+      classesAmount: 1,
       name: '',
-      folderPath: '',
-      modules: [],
+      submodules: modules,
     );
   }
 }
